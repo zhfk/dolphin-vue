@@ -3308,7 +3308,7 @@ var modifiers = {
    * - `vw`, CSS viewport width unit
    * - `vh`, CSS viewport height unit
    *
-   * For length is intended the main axis relative to the placement of the popper.<br />
+   * For length is intended the home axis relative to the placement of the popper.<br />
    * This means that if the placement is `top` or `bottom`, the length will be the
    * `width`. In case of `left` or `right`, it will be the height.
    *
