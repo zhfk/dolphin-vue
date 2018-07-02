@@ -1,43 +1,57 @@
 <template>
-  <form class="form-signin">
-    <div class="text-center mb-4">
-      <img class="mb-4" src="./login_dolphin.svg" alt="" width="80%" height="80%">
-      <h1 class="h3 mb-3 font-weight-normal">{{ msg }}</h1>
-    </div>
+  <div class="container">
+    <form class="form-signin">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="./login_dolphin.svg" alt="" width="80%" height="80%" @click="greeting()">
+        <h1 class="h3 mb-3 font-weight-normal">{{ msg }}</h1>
+      </div>
 
-    <div class="form-group form-inline">
-      <input type="text" id="inputPhoneNumber" class="form-control col-md-12" placeholder="手机号" v-model="phonenumber"
-             required autofocus>
-      <label for="inputPhoneNumber">手机号</label>
-    </div>
+      <div class="form-group form-inline">
+        <input type="text" id="inputPhoneNumber" class="form-control col-md-12" placeholder="手机号" v-model="phonenumber"
+               required autofocus>
+        <label for="inputPhoneNumber">手机号</label>
+      </div>
 
-    <div class="form-group form-inline">
-      <span class="col-md-8 form-group" id="validateCodeGroup">
-        <input type="text" id="validateCode" class="form-control col-md-12" placeholder="验证码" v-model="validateCode"
-               autofocus>
-        <label for="validateCode">验证码</label>
-      </span>
-      <button id='getVCbtn' class="col-md-4 btn btn-primary" type="submit" :disabled="!validateCode_btn.show">
-        <span v-show="validateCode_btn.show" @click="getValidateCode()">获取验证码</span>
-        <span v-show="!validateCode_btn.show" style="color: #ffffff">{{ validateCode_btn.count }} s</span>
-      </button>
-    </div>
+      <div class="form-group form-inline">
+        <span class="col-md-8 form-group" id="validateCodeGroup">
+          <input type="text" id="validateCode" class="form-control col-md-12" placeholder="手机验证码"
+                 v-model="validateCode">
+          <label for="validateCode"><small>手机验证码</small></label>
+        </span>
+        <button id='getVCbtn' class="col-md-4 btn btn-primary" type="submit" :disabled="!validateCode_btn.show">
+          <span v-show="validateCode_btn.show" @click="getValidateCode()">获取验证码</span>
+          <span v-show="!validateCode_btn.show" style="color: #ffffff">{{ validateCode_btn.count }} s</span>
+        </button>
+      </div>
+      <div class="form-group form-inline">
+        <span class="col-md-8 form-group" id="validateCodeGroupImg">
+          <input type="text" id="validateCodeImg" class="form-control col-md-12" v-model="inputIdentityCode" placeholder="验证码">
+          <label for="validateCodeImg"><small>右图中数字的和</small></label>
+        </span>
+        <span class="col-md-4" @click="refresh=!refresh">
+          <s-identify :identityrefresh="refresh" v-on:myevent="myevent"></s-identify>
+        </span>
+      </div>
+      <div class="alert alert-warning" v-show="validateWrong">验证码错误</div>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> 记住用户名
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" @click="login()">登录</button>
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+    </form>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> 记住用户名
-      </label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" @click="login()">登录</button>
-    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
-  </form>
+  </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import VueResource from 'vue-resource'
+  import SIdentify from '../identify/identify.vue'
 
   Vue.use(VueResource)
+  Vue.component('s-identify', SIdentify)
 
   export default {
     name: 'Dolphin analysis',
@@ -52,11 +66,17 @@
         phonenumber: null,
         validateCode: null,
         phonenumberReg: /^1[34578][0-9]{9}$/,
-        server_url: 'http://172.20.10.4:9966'
+        server_url: 'http://172.20.10.4:9966',
+        refresh: false,
+        inputIdentityCode: null,
+        identityCode: null,
+        validateWrong: false
       }
     },
-
     methods: {
+      greeting(){
+        alert("Dolphin 期待为您服务！")
+      },
       intervalValidateCodeExpire() {
         const TIME_COUNT = 60
         if (!this.validateCode_btn.timer) {
@@ -87,6 +107,9 @@
             })
         }
       },
+      myevent(data){
+        this.identityCode = data
+      },
       login() {
 //        if (!this.phonenumberReg.test(this.phonenumber)) {
 //          alert("请填写正确的手机号码！")
@@ -98,7 +121,16 @@
 //          }, {emulateJSON: true}).then(
 //            (response) => {
 //              console.log("登录成功,跳到主页...")
-              this.$router.push({name: 'home', params: {'phonenumber': this.phonenumber}})
+
+        this.inputIdentityCode = this.identityCode
+        if (this.identityCode !== null && $.isNumeric(this.inputIdentityCode) && parseInt(this.inputIdentityCode)===this.identityCode) {
+          console.log("验证码正确 "+this.identityCode)
+          this.$router.push({name: 'home', params: {'user': this.phonenumber}})
+        } else {
+          this.refresh = !this.refresh
+          this.validateWrong = true
+        }
+
 //            }, (response) => {
 //              alert("登录失败！")
 //            }
@@ -106,7 +138,6 @@
 //        }
       }
     }
-
   }
 </script>
 
@@ -209,5 +240,8 @@
     margin-left: -14px;
   }
 
+  #validateCodeGroupImg {
+    margin-left: -14px;
+  }
 
 </style>

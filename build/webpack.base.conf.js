@@ -21,18 +21,22 @@ const createLintingRule = () => ({
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
+
+  //打包入口文件
   entry: {
     app: './src/main.js'
   },
+
+  //输出文件的配置
   output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
+    path: config.build.assetsRoot, //放置位置
+    filename: '[name].js', //打包之后的文件名
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', 'csv'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -73,6 +77,14 @@ module.exports = {
         options: {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.(csv|tsv)$/,
+        loader: 'url-loader',    // 或者使用 loader: 'file-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('data/[name].[hash:7].[ext]')
         }
       }
     ]

@@ -33,6 +33,13 @@ module.exports = {
     'space-before-function-paren': 0,
     'no-unused-vars': 0,
     'space-infix-ops': 0,
-    'no-multiple-empty-lines': 0
+    'no-multiple-empty-lines': 0,
+    'no-undef': 0,
+    "space-in-parens": 0,
+    "no-eval": 0,
+    "padded-blocks": 0,
+    "semi": 0,
+    "spaced-comment": 0,
+    "one-var": 0
   }
 }
