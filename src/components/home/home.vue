@@ -97,19 +97,19 @@
       </div>
     </div>
     <div id="charts">
-      <pie-charts></pie-charts>
+      <!--<pie-charts></pie-charts>-->
       <multi-charts></multi-charts>
-      <my-chart></my-chart>
+      <!--<my-chart></my-chart>-->
     </div>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import personalInfo from '../personal/personal.vue'
-  import pieCharts from '../charts/pie/pie.vue'
-  import multiCharts from '../charts/mulitcharts.vue'
-  import myChart from "../charts/mychart/mycharts.vue"
+
+import personalInfo from '../personal/personal.vue'
+import pieCharts from '../charts/pie/pie.vue'
+import multiCharts from '../charts/mulitcharts.vue'
+import myChart from "../charts/mychart/mycharts.vue"
 
 export default {
   components: {

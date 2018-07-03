@@ -1,12 +1,37 @@
 <template>
   <div class="container">
-    <div id="gain-loss-chart"></div>
-    <div id="quarter-chart"></div>
-    <div id="day-of-week-chart"></div>
-    <div id="monthly-move-chart"></div>
-    <div id="fluctuation-chart"></div>
-    <div id="monthly-volume-chart"></div>
-    <div id="yearly-bubble-chart"></div>
+    <div id="yearly-bubble">
+      <div id="yearly-bubble-chart"></div>
+      <div>Index Gain</div>
+    </div>
+    <div class="form-inline" id="top3chart">
+      <div class="col-md-4">
+        <div id="gain-loss-chart"></div>
+        <div>损失／收益率</div>
+      </div>
+      <div class="col-md-4" >
+        <div id="quarter-chart"></div>
+        <div>季度</div>
+      </div>
+      <div class="col-md-4">
+        <div id="day-of-week-chart"></div>
+        <div>天／周</div>
+      </div>
+    </div>
+    <div id="monthlmove">
+      <div id="monthly-move-chart"></div>
+      <div>指数移动/月</div>
+    </div>
+    <div class="form-inline" id="fluct-volume">
+      <div class="col-md-4">
+        <div id="fluctuation-chart"></div>
+        <div>波动图</div>
+      </div>
+      <div class="col-md-8">
+        <div id="monthly-volume-chart"></div>
+        <div>成交量/月</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -164,55 +189,54 @@ export default {
 
           var dayOfWeekGroup = dayOfWeek.group();
 
-//          yearlyBubbleChart /* dc.bubbleChart('#yearly-bubble-chart', 'chartGroup') */
-//            .width(990)
-//            .height(250)
-//            .transitionDuration(1500)
-//            .margins({top: 10, right: 50, bottom: 30, left: 40})
-//            .dimension(yearlyDimension)
-//            .group(yearlyPerformanceGroup)
-//            .colors(colorbrewer.RdYlGn[9])
-//            .colorDomain([-500, 500])
-//            .colorAccessor(function (d) {
-//              return d.value.absGain;
-//            })
-//            .keyAccessor(function (p) {
-//              return p.value.absGain;
-//            })
-//            .valueAccessor(function (p) {
-//              return p.value.percentageGain;
-//            })
-//            .radiusValueAccessor(function (p) {
-//              return p.value.fluctuationPercentage;
-//            })
-//            .maxBubbleRelativeSize(0.3)
-//            .x(d3.scaleLinear().domain([-2500, 2500]))
-//            .y(d3.scaleLinear().domain([-100, 100]))
-//            .r(d3.scaleLinear().domain([0, 4000]))
-//            .elasticY(true)
-//            .elasticX(true)
-//            .yAxisPadding(100)
-//            .xAxisPadding(500)
-//            .renderHorizontalGridLines(true)
-//            .renderVerticalGridLines(true)
-//            .xAxisLabel('Index Gain')
-//            .yAxisLabel('Index Gain %')
-//            .renderLabel(true)
-//            .label(function (p) {
-//              return p.key;
-//            })
-//            .renderTitle(true)
-//            .title(function (p) {
-//              return [
-//                p.key,
-//                'Index Gain: ' + numberFormat(p.value.absGain),
-//                'Index Gain in Percentage: ' + numberFormat(p.value.percentageGain) + '%',
-//                'Fluctuation / Index Ratio: ' + numberFormat(p.value.fluctuationPercentage) + '%'
-//              ].join('\n');
-//            })
-//            .yAxis().tickFormat(function (v) {
-//              return v + '%';
-//            });
+         yearlyBubbleChart /* dc.bubbleChart('#yearly-bubble-chart', 'chartGroup') */
+           .width(990)
+           .height(250)
+           .transitionDuration(1500)
+           .margins({top: 30, right: 50, bottom: 25, left: 50})
+           .dimension(yearlyDimension)
+           .group(yearlyPerformanceGroup)
+           .colorDomain([-500, 500])
+           .colorAccessor(function (d) {
+             return d.value.absGain;
+           })
+           .keyAccessor(function (p) {
+             return p.value.absGain;
+           })
+           .valueAccessor(function (p) {
+             return p.value.percentageGain;
+           })
+           .radiusValueAccessor(function (p) {
+             return p.value.fluctuationPercentage;
+           })
+           .maxBubbleRelativeSize(0.3)
+           .x(d3.scaleLinear().domain([-2500, 2500]))
+           .y(d3.scaleLinear().domain([-100, 100]))
+           .r(d3.scaleLinear().domain([0, 4000]))
+           .elasticY(true)
+           .elasticX(true)
+           .yAxisPadding(100)
+           .xAxisPadding(500)
+           .renderHorizontalGridLines(true)
+           .renderVerticalGridLines(true)
+           // .xAxisLabel('Index Gain')
+           .yAxisLabel('Index Gain %')
+           .renderLabel(true)
+           .label(function (p) {
+             return p.key;
+           })
+           .renderTitle(true)
+           .title(function (p) {
+             return [
+               p.key,
+               'Index Gain: ' + numberFormat(p.value.absGain),
+               'Index Gain in Percentage: ' + numberFormat(p.value.percentageGain) + '%',
+               'Fluctuation / Index Ratio: ' + numberFormat(p.value.fluctuationPercentage) + '%'
+             ].join('\n');
+           })
+           .yAxis().tickFormat(function (v) {
+             return v + '%';
+           });
 
           gainOrLossChart /* dc.pieChart('#gain-loss-chart', 'chartGroup') */
             .width(180)
@@ -230,19 +254,19 @@ export default {
               }
               return label;
             })
-//            .renderLabel(true)
-//            .innerRadius(40)
-//            .transitionDuration(500)
-//            .colors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
-//            .colorDomain([-1750, 1644])
-//            .colorAccessor(function(d, i){return d.value;})
+           //  .innerRadius(40)
+           // .renderLabel(true)
+           // .transitionDuration(500)
+           // .colors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+           // .colorDomain([-1750, 1644])
+           // .colorAccessor(function(d, i){return d.value;})
         ;
 
           quarterChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
             .width(180)
             .height(180)
             .radius(80)
-            .innerRadius(30)
+            .innerRadius(40)
             .dimension(quarter)
             .group(quarterGroup);
 
@@ -265,8 +289,8 @@ export default {
 
           fluctuationChart /* dc.barChart('#volume-month-chart', 'chartGroup') */
             .width(420)
-            .height(180)
-            .margins({top: 10, right: 50, bottom: 30, left: 40})
+            .height(250)
+            .margins({top: 10, right: 10, bottom: 25, left: 50})
             .dimension(fluctuation)
             .group(fluctuationGroup)
             .elasticY(true)
@@ -288,9 +312,9 @@ export default {
           moveChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
             .renderArea(true)
             .width(990)
-            .height(200)
+            .height(300)
             .transitionDuration(1000)
-            .margins({top: 30, right: 50, bottom: 25, left: 40})
+            .margins({top: 30, right: 50, bottom: 25, left: 50})
             .dimension(moveMonths)
             .mouseZoomable(true)
             .rangeChart(volumeChart)
@@ -316,9 +340,10 @@ export default {
               return dateFormat(d.key) + '\n' + numberFormat(value);
             });
 
-          volumeChart.width(990) /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
-            .height(40)
-            .margins({top: 0, right: 50, bottom: 20, left: 40})
+          volumeChart
+            .width(700) /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
+            .height(250)
+            .margins({top: 10, right: 10, bottom: 25, left: 90})
             .dimension(moveMonths)
             .group(volumeByMonthGroup)
             .centerBar(true)
@@ -363,53 +388,53 @@ export default {
             .on('renderlet', function (table) {
               table.selectAll('.dc-table-group').classed('info', true);
             });
-/*
-            dc.geoChoroplethChart('#us-chart')
-             .width(990)
-             .height(500)
-             .transitionDuration(1000)
-             .dimension(states)
-             .group(stateRaisedSum)
-             .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
-            '#0061B5'])
-            .colorDomain([-5, 200])
-            .colorAccessor(function(d, i){return d.value;})
-            .overlayGeoJson(statesJson.features, 'state', function(d) {
-              return d.properties.name;
-            })
-            .title(function(d) {
-              return 'State: ' + d.key + '\nTotal Amount Raised: ' + numberFormat(d.value ? d.value : 0) + 'M';
-            });
-             dc.bubbleOverlay('#bubble-overlay', 'chartGroup')
-             .svg(d3.select('#bubble-overlay svg'))
-             .width(990)
-             .height(500)
-             .transitionDuration(1000)
-             .dimension(states)
-             .group(stateRaisedSum)
-             .keyAccessor(function(p) {return p.value.absGain;})
-             .valueAccessor(function(p) {return p.value.percentageGain;})
-             .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
-                '#0061B5'])
-             .colorDomain([-5, 200])
-             .colorAccessor(function(d, i){return d.value;})
-             .radiusValueAccessor(function(p) {return p.value.fluctuationPercentage;})
-             .r(d3.scaleLinear().domain([0, 3]))
-             .renderLabel(true)
-             .label(function(p) {return p.key.getFullYear();})
-             .renderTitle(true)
-             .title(function(d) {
-                return 'Title: ' + d.key;
-            })
-            .point('California', 100, 120)
-            .point('Colorado', 300, 120).debug(true);
- */
+
+            // dc.geoChoroplethChart('#us-chart')
+            //  .width(990)
+            //  .height(500)
+            //  .transitionDuration(1000)
+            //  .dimension(states)
+            //  .group(stateRaisedSum)
+            //  .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
+            // '#0061B5'])
+            // .colorDomain([-5, 200])
+            // .colorAccessor(function(d, i){return d.value;})
+            // .overlayGeoJson(statesJson.features, 'state', function(d) {
+            //   return d.properties.name;
+            // })
+            // .title(function(d) {
+            //   return 'State: ' + d.key + '\nTotal Amount Raised: ' + numberFormat(d.value ? d.value : 0) + 'M';
+            // });
+            //  dc.bubbleOverlay('#bubble-overlay', 'chartGroup')
+            //  .svg(d3.select('#bubble-overlay svg'))
+            //  .width(990)
+            //  .height(500)
+            //  .transitionDuration(1000)
+            //  .dimension(states)
+            //  .group(stateRaisedSum)
+            //  .keyAccessor(function(p) {return p.value.absGain;})
+            //  .valueAccessor(function(p) {return p.value.percentageGain;})
+            //  .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
+            //     '#0061B5'])
+            //  .colorDomain([-5, 200])
+            //  .colorAccessor(function(d, i){return d.value;})
+            //  .radiusValueAccessor(function(p) {return p.value.fluctuationPercentage;})
+            //  .r(d3.scaleLinear().domain([0, 3]))
+            //  .renderLabel(true)
+            //  .label(function(p) {return p.key.getFullYear();})
+            //  .renderTitle(true)
+            //  .title(function(d) {
+            //     return 'Title: ' + d.key;
+            // })
+            // .point('California', 100, 120)
+            // .point('Colorado', 300, 120).debug(true);
+
           dc.renderAll();
-/*
+
           dc.renderAll('group');
           dc.redrawAll();
           dc.redrawAll('group');
-\*/
+
 
           })
               d3.selectAll('#version').text(dc.version);
@@ -430,5 +455,21 @@ export default {
 </script>
 
 <style scoped>
+
+  #yearly-bubble {
+    background-color: #b4d19d;
+  }
+
+  #top3chart {
+    background-color: #a7c1a5;
+  }
+
+  #monthlmove {
+    background-color: #84bb8e;
+  }
+
+  #fluct-volume {
+    background-color: #c9e1c4;
+  }
 
 </style>
