@@ -7,7 +7,7 @@
     <div class="form-inline" id="top3chart">
       <div class="col-md-4">
         <div id="gain-loss-chart"></div>
-        <div>损失／收益率</div>
+        <div>损失/收益率</div>
       </div>
       <div class="col-md-4" >
         <div id="quarter-chart"></div>
@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-4">
         <div id="day-of-week-chart"></div>
-        <div>天／周</div>
+        <div>天/周</div>
       </div>
     </div>
     <div id="monthlmove">
@@ -29,9 +29,17 @@
       </div>
       <div class="col-md-8">
         <div id="monthly-volume-chart"></div>
-        <div>成交量/月</div>
+        <div>成交量/月
+        </div>
       </div>
     </div>
+    <div class="dc-data-count" id = "filter-count">
+      <strong>
+        <span class='filter-count'></span> selected out of <span class='total-count'></span> records.
+        <a href="#yearly-bubble" @click="reset()">reset all</a>
+      </strong>
+    </div>
+    <div class="dc-data-table"></div>
   </div>
 </template>
 
@@ -45,10 +53,17 @@ import sh from './000001.csv'
 export default {
     name: "mulitcharts",
     data(){
-      return {}
+      return {
+        dateRange: [new Date(1990, 12, 19), new Date(2018, 7, 2)]
+      }
     },
     methods:{
+      reset(){
+        dc.filterAll()
+        dc.redrawAll()
+      },
       loadCharts(){
+
         var gainOrLossChart = dc.pieChart('#gain-loss-chart');
         var fluctuationChart = dc.barChart('#fluctuation-chart');
         var quarterChart = dc.pieChart('#quarter-chart');
@@ -318,7 +333,7 @@ export default {
             .dimension(moveMonths)
             .mouseZoomable(true)
             .rangeChart(volumeChart)
-            .x(d3.scaleTime().domain([new Date(1985, 0, 1), new Date(2012, 11, 31)]))
+            .x(d3.scaleTime().domain(this.dateRange))
             .round(d3.timeMonth.round)
             .xUnits(d3.timeMonths)
             .elasticY(true)
@@ -348,19 +363,15 @@ export default {
             .group(volumeByMonthGroup)
             .centerBar(true)
             .gap(1)
-            .x(d3.scaleTime().domain([new Date(1985, 0, 1), new Date(2012, 11, 31)]))
+            .x(d3.scaleTime().domain(this.dateRange))
             .round(d3.timeMonth.round)
             .alwaysUseRounding(true)
-            .xUnits(d3.timeMonths);
+            .xUnits(d3.timeMonths)
+            .controlsUseVisibility(true)
 
           nasdaqCount /* dc.dataCount('.dc-data-count', 'chartGroup'); */
             .dimension(ndx)
             .group(all)
-            .html({
-              some: '<strong>%filter-count</strong> selected out of <strong>%total-count</strong> records' +
-              ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Reset All</a>',
-              all: 'All records selected. Please click on the graph to apply filters.'
-            });
 
           nasdaqTable /* dc.dataTable('.dc-data-table', 'chartGroup') */
             .dimension(dateDimension)
@@ -381,56 +392,13 @@ export default {
               },
               'volume'
             ])
-            .sortBy(function (d) {
-              return d.dd;
-            })
+            .sortBy(function (d) { return d.dd;})
             .order(d3.ascending)
             .on('renderlet', function (table) {
-              table.selectAll('.dc-table-group').classed('info', true);
+              table.selectAll('.dc-table-group').classed('info', true)
             });
 
-            // dc.geoChoroplethChart('#us-chart')
-            //  .width(990)
-            //  .height(500)
-            //  .transitionDuration(1000)
-            //  .dimension(states)
-            //  .group(stateRaisedSum)
-            //  .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
-            // '#0061B5'])
-            // .colorDomain([-5, 200])
-            // .colorAccessor(function(d, i){return d.value;})
-            // .overlayGeoJson(statesJson.features, 'state', function(d) {
-            //   return d.properties.name;
-            // })
-            // .title(function(d) {
-            //   return 'State: ' + d.key + '\nTotal Amount Raised: ' + numberFormat(d.value ? d.value : 0) + 'M';
-            // });
-            //  dc.bubbleOverlay('#bubble-overlay', 'chartGroup')
-            //  .svg(d3.select('#bubble-overlay svg'))
-            //  .width(990)
-            //  .height(500)
-            //  .transitionDuration(1000)
-            //  .dimension(states)
-            //  .group(stateRaisedSum)
-            //  .keyAccessor(function(p) {return p.value.absGain;})
-            //  .valueAccessor(function(p) {return p.value.percentageGain;})
-            //  .colors(['#ccc', '#E2F2FF','#C4E4FF','#9ED2FF','#81C5FF','#6BBAFF','#51AEFF','#36A2FF','#1E96FF','#0089FF',
-            //     '#0061B5'])
-            //  .colorDomain([-5, 200])
-            //  .colorAccessor(function(d, i){return d.value;})
-            //  .radiusValueAccessor(function(p) {return p.value.fluctuationPercentage;})
-            //  .r(d3.scaleLinear().domain([0, 3]))
-            //  .renderLabel(true)
-            //  .label(function(p) {return p.key.getFullYear();})
-            //  .renderTitle(true)
-            //  .title(function(d) {
-            //     return 'Title: ' + d.key;
-            // })
-            // .point('California', 100, 120)
-            // .point('Colorado', 300, 120).debug(true);
-
           dc.renderAll();
-
           dc.renderAll('group');
           dc.redrawAll();
           dc.redrawAll('group');
